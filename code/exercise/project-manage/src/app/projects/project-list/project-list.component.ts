@@ -1,15 +1,21 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input,
+  Output, EventEmitter } from '@angular/core';
 import { Project } from '../shared/project.model';
+import { eventNames } from 'process';
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.css']
 })
+
 export class ProjectListComponent implements OnInit {
   @Input()
   projects: Project[] = [];
   editingProject: Project;
+
+  @Output()
+  saveListItem = new EventEmitter<any>();
 
   onEdit(event: any){
     this.editingProject = event.editingProject;
@@ -18,6 +24,11 @@ export class ProjectListComponent implements OnInit {
 
   onCancel(){
     this.editingProject =null;
+  }
+
+  onSave(event: any){
+    this.editingProject = null;
+    this.saveListItem.emit({ item: event.project });
   }
   constructor() { }
 
